@@ -1,0 +1,8 @@
+create_table("contents") {
+  t.Column("id", "integer", {primary: true})
+  t.Column("tag", "string", {"size": 32})
+  t.Column("type", "string", {"size": 32})
+  t.Column("time", "integer", {})
+  t.Column("created_at", "timestamp", {})
+}
+

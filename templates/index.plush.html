@@ -1,0 +1,73 @@
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 col-sm-9 col-xs-10 titles">
+        <h1><%= t("welcome_greeting") %></h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<%= for (typ) in ["reading", "video"] { %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="subtitle">
+      <div class="container">
+        <h3><%= capitalize(typ) %> Time</h3>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr text-align="left">
+            <th class="centered">TAG</th>
+            <th>TIME</th>
+            <th>ACCOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for (c) in contents { %>
+          <%= if (c.Type == typ) { %>
+          <tr>
+            <%= form({action: contentSavePath(), method: "POST"}) { %>
+            <td class="centered">
+              <%= c.Tag %>
+            </td>
+            <td>
+              <%= c.Time %>
+            </td>
+            <td>
+              <input type=hidden name="tag" value="<%= c.Tag %>">
+              <input type=hidden name="type" value="<%= c.Type %>">
+              <input class="form-control with-width" style="widh: 100px" type=text name="time">
+            </td>
+            <td>
+              <input class="btn btn-success" type=submit value="Ack">
+            </td>
+            <% } %>
+          </tr>
+          <% } %>
+          <% } %>
+
+          <tr>
+            <%= form({action: contentSavePath(), method: "POST"}) { %>
+            <td class="centered">
+              <input class="form-control" type=text name="tag">
+            </td>
+            <td>
+            </td>
+            <td>
+              <input type=hidden name="type" value="<%= typ %>">
+              <input class="form-control with-width" type=text name="time">
+            </td>
+            <td>
+              <input class="btn btn-success" type=submit value="Ack">
+            </td>
+            <% } %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% } %>

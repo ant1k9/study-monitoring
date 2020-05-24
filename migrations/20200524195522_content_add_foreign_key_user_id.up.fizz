@@ -1,0 +1,5 @@
+add_column("contents", "user_id", "uuid", {})
+add_foreign_key("contents", "user_id", {"users": ["id"]}, {
+  "on_delete": "CASCADE",
+  "on_update": "CASCADE",
+})

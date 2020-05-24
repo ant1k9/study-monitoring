@@ -20,7 +20,7 @@ func ContentSave(c buffalo.Context) error {
 
 	t, err := strconv.ParseInt(req.Form.Get("time"), 10, 64)
 	if err != nil {
-		c.Logger().Errorf("content save: convert time: %s", err)
+		c.Logger().Errorf("content save: convert time: %s, %s", err, req.Form)
 		return c.Redirect(http.StatusSeeOther, "/")
 	}
 

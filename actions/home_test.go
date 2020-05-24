@@ -1,6 +1,11 @@
 package actions
 
-import "github.com/ant1k9/study-monitoring/models"
+import (
+	"fmt"
+	"time"
+
+	"github.com/ant1k9/study-monitoring/models"
+)
 
 func (as *ActionSuite) Test_HomeHandler() {
 	res := as.HTML("/").Get()
@@ -10,11 +15,14 @@ func (as *ActionSuite) Test_HomeHandler() {
 
 func (as *ActionSuite) Test_HomeHandler_LoggedIn() {
 	u := &models.User{
-		Email:                "mark@example.com",
+		Email:                fmt.Sprintf("%d@test_logged_in.com", time.Now().Nanosecond()),
 		Password:             "password",
 		PasswordConfirmation: "password",
 	}
+
 	verrs, err := u.Create(as.DB)
+	defer as.DB.Destroy(u)
+
 	as.NoError(err)
 	as.False(verrs.HasAny())
 	as.Session.Set("current_user_id", u.ID)

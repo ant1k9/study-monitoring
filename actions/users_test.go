@@ -1,6 +1,9 @@
 package actions
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/ant1k9/study-monitoring/models"
 )
 
@@ -15,13 +18,14 @@ func (as *ActionSuite) Test_Users_Create() {
 	as.Equal(0, count)
 
 	u := &models.User{
-		Email:                "mark@example.com",
+		Email:                fmt.Sprintf("%d@test_users_create.com", time.Now().Nanosecond()),
 		Password:             "password",
 		PasswordConfirmation: "password",
 	}
 
 	res := as.HTML("/users").Post(u)
 	as.Equal(302, res.Code)
+	defer as.DB.Destroy(u)
 
 	count, err = as.DB.Count("users")
 	as.NoError(err)

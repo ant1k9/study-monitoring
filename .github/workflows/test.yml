@@ -1,18 +1,37 @@
+name: test
+
 on:
   push:
     branches:
       - master
 
-name: test
-
 jobs:
   build:
-    name: Test
+    name: Run and test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
     steps:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.13'
+          go-version: ^1.13
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+      - name: Get dependencies
+        run: |
+          go get -v -t -d ./...
+          go get github.com/gobuffalo/pop/...
       - name: Make tests
-        run: make test
+        run: |
+          export GO_ENV=test
+          export TEST_DATABASE_URL="postgres://postgres:postgres@localhost:5432/test?sslmode=disable"
+          make test
+      - name: Upload coverage
+        run: |
+          bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

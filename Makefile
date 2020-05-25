@@ -7,5 +7,6 @@ test:
 
 .PHONY=dev
 dev:
+	export ADDR=0.0.0.0
 	export GO_ENV=development
 	buffalo dev

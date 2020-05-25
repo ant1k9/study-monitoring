@@ -1,6 +1,6 @@
 body {
   margin: 0px;
-  padding: 20px;
+  padding: 10px 0px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 20px;
   line-height: 20px;
@@ -8,7 +8,7 @@ body {
 }
 
 td,th {
-  padding: 10px;
+  padding: 10px 0px;
   text-align: left;
 }
 
@@ -28,12 +28,8 @@ a {
 
 header {
   background-color: #62a5ee;
-  padding: 10px 20px;
+  padding: 10px 0px;
   box-sizing: border-box;
-}
-
-.with-width {
-  width: 200px;
 }
 
 .logo {

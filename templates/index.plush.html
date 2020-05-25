@@ -29,7 +29,7 @@
           <%= for (c) in contents { %>
           <%= if (c.Type == typ) { %>
           <tr>
-            <%= form({action: contentSavePath(), method: "POST"}) { %>
+            <%= form({action: contentSavePath(), method: "POST", class: "form-inline"}) { %>
             <td class="centered">
               <%= c.Tag %>
             </td>
@@ -39,7 +39,7 @@
             <td>
               <input type=hidden name="tag" value="<%= c.Tag %>">
               <input type=hidden name="type" value="<%= c.Type %>">
-              <input class="form-control with-width" style="widh: 100px" type=text name="time">
+              <input class="form-control" type=text name="time">
             </td>
             <td>
               <input class="btn btn-success" type=submit value="Ack">
@@ -58,7 +58,7 @@
             </td>
             <td>
               <input type=hidden name="type" value="<%= typ %>">
-              <input class="form-control with-width" type=text name="time">
+              <input class="form-control" type=text name="time">
             </td>
             <td>
               <input class="btn btn-success" type=submit value="Ack">

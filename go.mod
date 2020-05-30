@@ -16,7 +16,7 @@ require (
 	github.com/gobuffalo/validate/v3 v3.1.0
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.6.0 // indirect
+	github.com/sirupsen/logrus v1.6.0
 	github.com/unrolled/secure v0.0.0-20190103195806-76e6d4e9b90c
 	golang.org/x/crypto v0.0.0-20200320181102-891825fb96df
 )

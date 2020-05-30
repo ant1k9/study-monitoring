@@ -5,6 +5,7 @@ import (
 	"github.com/gobuffalo/envy"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
+	"github.com/sirupsen/logrus"
 	"github.com/unrolled/secure"
 
 	"github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
@@ -39,6 +40,7 @@ func App() *buffalo.App {
 		app = buffalo.New(buffalo.Options{
 			Env:         ENV,
 			SessionName: "_study_monitoring_session",
+			LogLvl:      logrus.WarnLevel,
 		})
 
 		// Automatically redirect to SSL

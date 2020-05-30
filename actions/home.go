@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gobuffalo/buffalo"
@@ -16,7 +15,7 @@ func HomeHandler(c buffalo.Context) error {
 
 	var content models.Contents
 	err := models.DB.Select(`tag, type, SUM(time)::INT "time"`).
-		Where("user_id = ? AND TO_CHAR(created_at, 'yy-dd') = TO_CHAR(NOW(), 'yy-dd')", uid).
+		Where("user_id = ? AND TO_CHAR(created_at, 'yy-ww') = TO_CHAR(NOW(), 'yy-ww')", uid).
 		GroupBy("tag", "type").
 		All(&content)
 	if err != nil {
@@ -49,7 +48,6 @@ func HomeHandler(c buffalo.Context) error {
 }
 
 func asPercents(currentWeekTime, avgWeekTime *models.Content) float64 {
-	fmt.Println(currentWeekTime, avgWeekTime)
 	if avgWeekTime != nil && currentWeekTime != nil && currentWeekTime.Time < avgWeekTime.Time {
 		return float64(currentWeekTime.Time) / float64(avgWeekTime.Time) * 100
 	}

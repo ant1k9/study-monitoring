@@ -3,6 +3,7 @@ package actions
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gofrs/uuid"
@@ -32,7 +33,7 @@ func ContentSave(c buffalo.Context) error {
 	}
 
 	cont := &models.Content{
-		Tag:    req.Form.Get("tag"),
+		Tag:    strings.ToLower(req.Form.Get("tag")),
 		Type:   req.Form.Get("type"),
 		Time:   t,
 		UserID: uid,

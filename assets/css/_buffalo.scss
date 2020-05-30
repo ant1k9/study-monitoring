@@ -38,6 +38,19 @@ header {
   }
 }
 
+#progress-container {
+  width: 100%;
+  background-color: #eee;
+}
+
+#progress-bar {
+  height: 40px;
+  background-color: #28a745;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
 .titles {
   h1 {
     font-size: 30px;

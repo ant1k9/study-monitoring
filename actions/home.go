@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gobuffalo/buffalo"
@@ -14,16 +15,43 @@ func HomeHandler(c buffalo.Context) error {
 	uid := c.Session().Get("current_user_id")
 
 	var content models.Contents
-	err := models.DB.Select(`tag, type, sum(time)::int "time"`).
-		Where("user_id = ?", uid).
+	err := models.DB.Select(`tag, type, SUM(time)::INT "time"`).
+		Where("user_id = ? AND TO_CHAR(created_at, 'yy-dd') = TO_CHAR(NOW(), 'yy-dd')", uid).
 		GroupBy("tag", "type").
 		All(&content)
+	if err != nil {
+		c.Logger().Errorf("get home page: %s", err)
+	}
 
+	currentWeekTime, avgWeekTime := &models.Content{}, &models.Content{}
+	err = models.DB.Select(`SUM(time) AS time`).
+		Where(`TO_CHAR(created_at, 'yy-ww') = TO_CHAR(NOW(), 'yy-ww')`).
+		First(currentWeekTime)
+	if err != nil {
+		c.Logger().Errorf("get home page: %s", err)
+	}
+
+	err = models.DB.RawQuery(`
+		SELECT ROUND(AVG(t)) as time FROM (
+			SELECT SUM(time) t, TO_CHAR(created_at, 'yy-ww') w
+				FROM contents
+				GROUP BY w
+		) _ WHERE w != TO_CHAR(NOW(), 'yy-ww')
+		`).First(avgWeekTime)
 	if err != nil {
 		c.Logger().Errorf("get home page: %s", err)
 	}
 
 	c.Set("contents", content)
 	c.Set("types", content.GetUniqueTypes())
+	c.Set("progress", asPercents(currentWeekTime, avgWeekTime))
 	return c.Render(http.StatusOK, r.HTML("index.html"))
+}
+
+func asPercents(currentWeekTime, avgWeekTime *models.Content) float64 {
+	fmt.Println(currentWeekTime, avgWeekTime)
+	if avgWeekTime != nil && currentWeekTime != nil && currentWeekTime.Time < avgWeekTime.Time {
+		return float64(currentWeekTime.Time) / float64(avgWeekTime.Time) * 100
+	}
+	return 100.0
 }

@@ -15,7 +15,7 @@ func HomeHandler(c buffalo.Context) error {
 
 	var content models.Contents
 	err := models.DB.Select(`tag, type, SUM(time)::INT "time"`).
-		Where("user_id = ? AND TO_CHAR(created_at, 'yy-ww') = TO_CHAR(NOW(), 'yy-ww')", uid).
+		Where("user_id = ? AND TO_CHAR(created_at, 'yy-iw') = TO_CHAR(NOW(), 'yy-iw')", uid).
 		GroupBy("tag", "type").
 		All(&content)
 	if err != nil {
@@ -24,7 +24,7 @@ func HomeHandler(c buffalo.Context) error {
 
 	currentWeekTime, avgWeekTime := &models.Content{}, &models.Content{}
 	err = models.DB.Select(`SUM(time) AS time`).
-		Where(`TO_CHAR(created_at, 'yy-ww') = TO_CHAR(NOW(), 'yy-ww')`).
+		Where(`TO_CHAR(created_at, 'yy-iw') = TO_CHAR(NOW(), 'yy-iw')`).
 		First(currentWeekTime)
 	if err != nil {
 		c.Logger().Errorf("get home page: %s", err)
@@ -32,10 +32,10 @@ func HomeHandler(c buffalo.Context) error {
 
 	err = models.DB.RawQuery(`
 		SELECT ROUND(AVG(t)) as time FROM (
-			SELECT SUM(time) t, TO_CHAR(created_at, 'yy-ww') w
+			SELECT SUM(time) t, TO_CHAR(created_at, 'yy-iw') w
 				FROM contents
 				GROUP BY w
-		) _ WHERE w != TO_CHAR(NOW(), 'yy-ww')
+		) _ WHERE w != TO_CHAR(NOW(), 'yy-iw')
 		`).First(avgWeekTime)
 	if err != nil {
 		c.Logger().Errorf("get home page: %s", err)

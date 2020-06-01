@@ -19,7 +19,7 @@ func (as *ActionSuite) Test_Content_Save() {
 	res = as.HTML("/content/save").Post(
 		map[string]string{
 			"type": "reading",
-			"tag":  "hobby-bobby",
+			"tag":  "hobby-bobby ",
 			"time": "100",
 		},
 	)
@@ -28,6 +28,7 @@ func (as *ActionSuite) Test_Content_Save() {
 	res = as.HTML("/").Get()
 	as.Equal(200, res.Code)
 	as.Contains(res.Body.String(), "hobby-bobby")
+	as.NotContains(res.Body.String(), "hobby-bobby ")
 }
 
 func (as *ActionSuite) Test_Saved_Content_Only_For_Creator() {
@@ -40,7 +41,7 @@ func (as *ActionSuite) Test_Saved_Content_Only_For_Creator() {
 
 	res = as.HTML("/content/save").Post(
 		map[string]string{
-			"type": "reading",
+			"type": "reading ",
 			"tag":  "hobby-bobby",
 			"time": "100",
 		},

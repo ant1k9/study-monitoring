@@ -33,8 +33,8 @@ func ContentSave(c buffalo.Context) error {
 	}
 
 	cont := &models.Content{
-		Tag:    strings.ToLower(req.Form.Get("tag")),
-		Type:   req.Form.Get("type"),
+		Tag:    normalize(req.Form.Get("tag")),
+		Type:   normalize(req.Form.Get("type")),
 		Time:   t,
 		UserID: uid,
 	}
@@ -44,4 +44,8 @@ func ContentSave(c buffalo.Context) error {
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/")
+}
+
+func normalize(s string) string {
+	return strings.Trim(strings.ToLower(s), " ")
 }

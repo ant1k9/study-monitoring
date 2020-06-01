@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"math"
 	"net/http"
 
 	"github.com/gobuffalo/buffalo"
@@ -49,7 +50,7 @@ func HomeHandler(c buffalo.Context) error {
 
 func asPercents(currentWeekTime, avgWeekTime *models.Content) float64 {
 	if avgWeekTime != nil && currentWeekTime != nil && currentWeekTime.Time < avgWeekTime.Time {
-		return float64(currentWeekTime.Time) / float64(avgWeekTime.Time) * 100
+		return math.Round(float64(currentWeekTime.Time) / float64(avgWeekTime.Time) * 100)
 	}
 	return 100.0
 }

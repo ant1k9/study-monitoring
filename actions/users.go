@@ -1,17 +1,20 @@
 package actions
 
 import (
-	"github.com/ant1k9/study-monitoring/models"
+	"net/http"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/pkg/errors"
+
+	"github.com/ant1k9/study-monitoring/models"
 )
 
 //UsersNew renders the users form
 func UsersNew(c buffalo.Context) error {
 	u := models.User{}
 	c.Set("user", u)
-	return c.Render(200, r.HTML("users/new.plush.html"))
+	return c.Render(http.StatusOK, r.HTML("users/new.plush.html"))
 }
 
 // UsersCreate registers a new user with the application.
@@ -30,13 +33,13 @@ func UsersCreate(c buffalo.Context) error {
 	if verrs.HasAny() {
 		c.Set("user", u)
 		c.Set("errors", verrs)
-		return c.Render(200, r.HTML("users/new.plush.html"))
+		return c.Render(http.StatusOK, r.HTML("users/new.plush.html"))
 	}
 
 	c.Session().Set("current_user_id", u.ID)
 	c.Flash().Add("success", "Welcome to Buffalo!")
 
-	return c.Redirect(302, "/")
+	return c.Redirect(http.StatusMovedPermanently, "/")
 }
 
 // SetCurrentUser attempts to find a user based on the current_user_id
@@ -69,7 +72,7 @@ func Authorize(next buffalo.Handler) buffalo.Handler {
 			}
 
 			c.Flash().Add("danger", "You must be authorized to see that page")
-			return c.Redirect(302, "/auth/new")
+			return c.Redirect(http.StatusMovedPermanently, "/auth/new")
 		}
 		return next(c)
 	}

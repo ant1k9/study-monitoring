@@ -23,13 +23,13 @@ func (as *ActionSuite) createUser() (*models.User, error) {
 
 func (as *ActionSuite) Test_Auth_Signin() {
 	res := as.HTML("/auth/").Get()
-	as.Equal(200, res.Code)
+	as.Equal(http.StatusOK, res.Code)
 	as.Contains(res.Body.String(), `<a href="/auth/new/">Sign In</a>`)
 }
 
 func (as *ActionSuite) Test_Auth_New() {
 	res := as.HTML("/auth/new").Get()
-	as.Equal(200, res.Code)
+	as.Equal(http.StatusOK, res.Code)
 	as.Contains(res.Body.String(), "Sign In")
 }
 
@@ -46,7 +46,7 @@ func (as *ActionSuite) Test_Auth_Create() {
 
 		Identifier string
 	}{
-		{u.Email, u.Password, http.StatusFound, "/", "Valid"},
+		{u.Email, u.Password, http.StatusMovedPermanently, "/", "Valid"},
 		{"noexist@example.com", "password", http.StatusUnauthorized, "", "Email Invalid"},
 		{u.Email, "invalidPassword", http.StatusUnauthorized, "", "Password Invalid"},
 	}
@@ -86,7 +86,7 @@ func (as *ActionSuite) Test_Auth_Redirect() {
 
 			res := as.HTML("/auth/new").Post(u)
 
-			as.Equal(302, res.Code)
+			as.Equal(http.StatusMovedPermanently, res.Code)
 			as.Equal(res.Location(), tcase.resultLocation)
 		})
 	}

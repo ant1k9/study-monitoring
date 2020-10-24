@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/ant1k9/study-monitoring/models"
@@ -9,7 +10,7 @@ import (
 
 func (as *ActionSuite) Test_Users_New() {
 	res := as.HTML("/users/new").Get()
-	as.Equal(200, res.Code)
+	as.Equal(http.StatusOK, res.Code)
 }
 
 func (as *ActionSuite) Test_Users_Create() {
@@ -24,7 +25,7 @@ func (as *ActionSuite) Test_Users_Create() {
 	}
 
 	res := as.HTML("/users").Post(u)
-	as.Equal(302, res.Code)
+	as.Equal(http.StatusMovedPermanently, res.Code)
 	defer as.DB.Destroy(u)
 
 	count, err = as.DB.Count("users")

@@ -29,7 +29,6 @@ jobs:
           go get github.com/gobuffalo/pop/...
       - name: Make tests
         run: |
-          export GO_ENV=test
           export TEST_DATABASE_URL="postgres://postgres:postgres@localhost:5432/test?sslmode=disable"
           make test
       - name: Upload coverage

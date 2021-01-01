@@ -2,8 +2,8 @@
 
 test:
 	export GO_ENV=test
-	- soda create
-	soda migrate
+	- soda create -e test
+	soda migrate -e test
 	GO_ENV=test go test -v -p=1 ./... -coverprofile=coverage.txt -covermode=atomic
 
 cover:
@@ -11,5 +11,6 @@ cover:
 
 dev:
 	export ADDR=0.0.0.0
+	export PORT=3000
 	export GO_ENV=development
 	buffalo dev
